@@ -1,0 +1,6 @@
+temp.py
+__pycache__/
+api_key.txt
+
+data/raw/
+data/input.txt
