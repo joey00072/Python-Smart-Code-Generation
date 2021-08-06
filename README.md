@@ -3,10 +3,12 @@ Genration python code using LSTM
 
 run `genrate.py`
 
-```
-py genrate.py
-Enter start code: import numpy as
-import numpy as np
-import matplotlib.pyplot as plt
+![](result.gif)
 
-```
+Save Traing Data in `./data/input.txt`
+<br>
+Change hyper params in `main.py`.
+reduce chunk_len or num_layer if you
+want to train faster
+
+run `main.py` for training
