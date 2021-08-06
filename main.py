@@ -12,11 +12,11 @@ from model import RNN
 
 
 chunk_len = 250
-num_epochs = 500
+num_epochs = 50000
 batch_size = 1
 print_every = 50
 hidden_size = 256
-num_layers = 2
+num_layers = 5
 lr = 0.003
 
 # Getting all chars
@@ -38,7 +38,7 @@ def init_hidden(batch_size):
     cell = torch.zeros(num_layers, batch_size, hidden_size).to(device)
     return hidden, cell
 
-def char_tensor( string):
+def char_tensor(string):
     en = tokenizer.encode(string)
     return torch.tensor([x for x in en.ids])
 
@@ -63,12 +63,13 @@ def get_random_batch():
     return text_input.long(), text_target.long()
 
 
-def generate(model,initial_str="A", predict_len=100, temperature=0.85):
+def generate(model,initial_str="imp", predict_len=100, temperature=0.85):
     hidden, cell = init_hidden(batch_size=batch_size)
     initial_input = char_tensor(initial_str)
     predicted = initial_str
 
-    for p in range(len(initial_str) - 1):
+
+    for p in range(len(initial_input) - 1):
         _, (hidden, cell) = model(
             initial_input[p].view(1).to(device), hidden, cell
         )
@@ -89,18 +90,21 @@ def generate(model,initial_str="A", predict_len=100, temperature=0.85):
     return predicted
 
 
-
 def train(model):
     print("START...")
 
     for epoch in range(1, num_epochs + 1):
+        # print(f"{epoch=}")
         inp, target = get_random_batch()
         hidden, cell = init_hidden(batch_size=batch_size)
 
         model.zero_grad()
         loss = 0
+
         inp = inp.to(device)
         target = target.to(device)
+        
+    
 
         for c in range(chunk_len):
             output, (hidden, cell) = model(inp[:, c], hidden, cell)
@@ -111,11 +115,12 @@ def train(model):
         loss = loss.item() / chunk_len
 
         if  epoch % print_every == 0:
+            print(f"{epoch=}")
             print(f"Loss: {loss}")
             print(generate(model))
-        
-        if epoch%(num_epochs//3)==0:
-            ep_num = int(epoch/(num_epochs//10))
+        N=5000
+        if epoch%(N)==0:
+            ep_num = int(epoch/(N))
             print(f"Saving...{ep_num}")
             torch.save(model.state_dict(),f"models/model_e{ep_num}.pth")
 
@@ -129,3 +134,5 @@ if __name__=="__main__":
     criterion = nn.CrossEntropyLoss()
 
     train(model)
+
+

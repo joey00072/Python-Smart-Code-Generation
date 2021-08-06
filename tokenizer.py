@@ -7,8 +7,8 @@ paths=['data/input.txt']
 tokenizer.train(
     
     files=paths,
-    vocab_size=1000,
-    min_frequency=50,
+    vocab_size=150,
+    min_frequency=5,
     special_tokens=[
         "<s>",
         "<pad>",
@@ -31,5 +31,3 @@ print([item for item in t.tokens])
 
 print(tokenizer.decode(v.numpy()))
 
-
-print(dir(tokenizer))

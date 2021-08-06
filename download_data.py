@@ -41,7 +41,7 @@ def main():
                 start= str(datetime.today()-timedelta(K+i+1))[:-16]
                 end  = str(datetime.today()-timedelta(K+i))[:-16]
 
-                query = f'pytorch language:python created:{start}..{end}'
+                query = f'numpy tutorial language:python created:{start}..{end}'
 
                 result =  g.search_repositories(query)
 
